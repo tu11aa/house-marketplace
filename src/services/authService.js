@@ -46,4 +46,4 @@ const signIn = async (data) => {
   }
 };
 
-export { signUp, signIn };
+export { signUp, signIn, auth };
