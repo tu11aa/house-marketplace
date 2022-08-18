@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import {signUp} from "../services/authService"
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false)
-  const [fromData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
@@ -20,7 +21,11 @@ function SignIn() {
     }))
   }
 
-  const onSubmit = () => {}
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    signUp(formData)
+  }
   
   return (
     <>
