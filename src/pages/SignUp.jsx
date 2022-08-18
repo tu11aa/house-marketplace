@@ -4,8 +4,7 @@ import {Link, useNavigate} from "react-router-dom"
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import {signUp} from "../services/authService"
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify'
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false)
@@ -29,6 +28,8 @@ function SignUp() {
     e.preventDefault()
     try{
       await signUp(formData)
+      navigate("/")
+      toast.success("Sign up success")
     }
     catch (error){
       toast.error(error.message)
@@ -37,7 +38,6 @@ function SignUp() {
   
   return (
     <>
-      <ToastContainer autoClose={2000}/>
       <div className="pageContainer">
         <header>
           <p className='pageHeader'>Welcome!</p>

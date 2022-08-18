@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
-import {signUp} from "../services/authService"
+import {signIn} from "../services/authService"
+import { toast } from 'react-toastify'
+import { async } from '@firebase/util'
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false)
@@ -21,10 +23,16 @@ function SignIn() {
     }))
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-
-    signUp(formData)
+    try {
+      const user = await signIn(formData)
+      navigate("/")
+      toast.success(`You have signed in as ${user.email}`)
+    }
+    catch (error){
+      toast.error(error.message)
+    }
   }
   
   return (
