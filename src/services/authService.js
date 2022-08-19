@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { setDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
@@ -65,8 +66,12 @@ const updateUser = async (name) => {
   }
 };
 
+const resetPassword = async (email) => {
+  await sendPasswordResetEmail(auth, email);
+};
+
 const _getAuth = () => {
   return { ...auth };
 };
 
-export { signUp, signIn, signOut, _getAuth, updateUser };
+export { signUp, signIn, signOut, _getAuth, updateUser, resetPassword };
