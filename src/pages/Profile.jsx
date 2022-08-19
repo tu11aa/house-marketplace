@@ -1,13 +1,11 @@
-import { getAuth, updateProfile } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import {doc, updateDoc} from "firebase/firestore"
-import {db} from "../firebase.config"
+import { _getAuth, signOut, updateUser } from '../services/authService'
 
 
 function Profile() {
-  const auth = getAuth()
+  const auth = _getAuth()
   const navigate = useNavigate()
 
   const [isChanged, setIsChanged] = useState(false)
@@ -18,28 +16,16 @@ function Profile() {
   const { name, email } = formData
 
   const logOut = async () => {
-    auth.signOut()
-    navigate("/")
+    signOut()
     toast.success("Log out success")
+    navigate("/")
   }
 
   const onSubmit = async () => {
     try {
-      if (auth.currentUser.displayName !== name) {
-        // Update display name in fb
-        await updateProfile(auth.currentUser, {
-          displayName: name,
-        })
-
-        // Update in firestore
-        const userRef = doc(db, 'users', auth.currentUser.uid)
-        await updateDoc(userRef, {
-          name,
-        })
-      }
+      updateUser(name)
     } catch (error) {
-      console.log(error)
-      toast.error('Could not update profile details')
+      toast.error(error.message)
     }
   }
 

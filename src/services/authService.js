@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { setDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 const auth = getAuth();
@@ -46,4 +46,27 @@ const signIn = async (data) => {
   }
 };
 
-export { signUp, signIn, auth };
+const signOut = () => {
+  auth.signOut();
+};
+
+const updateUser = async (name) => {
+  if (auth.currentUser.displayName !== name) {
+    // Update display name in fb
+    await updateProfile(auth.currentUser, {
+      displayName: name,
+    });
+
+    // Update in firestore
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    await updateDoc(userRef, {
+      name,
+    });
+  }
+};
+
+const _getAuth = () => {
+  return { ...auth };
+};
+
+export { signUp, signIn, signOut, _getAuth, updateUser };
